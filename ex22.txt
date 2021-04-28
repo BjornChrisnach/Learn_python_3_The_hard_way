@@ -1,0 +1,49 @@
+print() print to the console window
+# comment
+SyntaxError there is something wrong with the typed source code, the interpreter can't read it
++ addition
+- subtraction
+/ divide
+* multiplying
+% modulus
+< less then
+> greater then
+<= less then or equal
+>= greater then or equal
+= assignment
+== equal
+!= not equal
+f f-string is used at the beginning of a string, in combination with placeholders {}
+end=" " is used to bypass the \n next line character
+.format() is used at the end of a string, in combination with placeholders {}
+print('x', ) , adds the next string, and the next one and so on
+"'x'" single quotes in a string between double quotes
+'"x"' double quotes in a string between single quotes
+''' or """ triple qoutes for multiple strings or the two above
+\n linefeed, next line escape character
+\\ backslash, with escape character
+\' single qoute, with escape character
+\" double qoute, with escape character
+\t horizontal tab, with escape character
+input() used to get user keyboard input
+from x import y import a certain function from a library or module
+import x import a certain module or library,you need a dot notation to call a function from it
+var1, var2 = *args unpacking into variables on the left side of the assignment operator
+input(prompt) used as prompt = >
+open() used as open(filename) to open a file for reading and or writing, used with a node example 'w'
+file object.read() reads the entire file. Reads the contents of the file. You can assign the result to a variable.
+file object.close() closes the file
+file object.readline() Reads just one line of a text file.
+file object.truncate() Empties the file. Watch out if you care about the file.
+file objetct.write() Writes ”stuff” to the file.
+file objetct.seek(0) sets the pointer at a certain byte of the file object.reader
+def used to define a function, used with () and arguments, followed by a :
+return returns something from the functions and interupts further reading in the function, it breaks out of it
+IndentationError The indentation of the given code isn't correct
+DivideByZeroError we have divided by zero, and we need to adress this
+ValueError not enough arguments are given
+NameError a name is used that isn't previously identified, check spelling
+ImportError try to see what you are typing, don't use the .py extension
+and only True if both statements are True
+or True if one of both statements are True
+not True if the statement is False, the opposite of the statement
