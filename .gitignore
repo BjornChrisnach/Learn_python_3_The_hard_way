@@ -2,3 +2,12 @@
 .vscode
 env
 __pycache__
+lpthw
+docs
+bin
+build
+dist
+ex47.egg-info
+__init__.py
+__init__.pyc
+ex48.egg-info
