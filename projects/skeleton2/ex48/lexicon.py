@@ -25,7 +25,8 @@ class Lexicon(object):
     # scan for the correct output with a given word or word list, so check for a word or a list
     def scan(self, scan_variable):
         # check the input or search sentence for multiple or single word(s)
-        created_output_sentence = self.set_output_sentence(scan_variable)
+        scan_variable = scan_variable.lower()
+        created_output_sentence = self.set_input_sentence(scan_variable)
         return created_output_sentence        
 
     # build the list of words
@@ -69,24 +70,7 @@ class Lexicon(object):
             # if the right column [1] is the needed to search word, the left
             # column must be the [0]
             if tuple_lst_item[1] == search_word:
-                if tuple_lst_item[0] == 'direction':
-                    token = "direction"
-                    break
-                elif tuple_lst_item[0] == 'verb':
-                    token = "verb"
-                    break
-                elif tuple_lst_item[0] == 'stop':
-                    token = "stop"
-                    break
-                elif tuple_lst_item[0] == 'noun':
-                    token = "noun"
-                    break
-                elif tuple_lst_item[0] == 'number':
-                    token = "number"
-                    break
-                elif tuple_lst_item[0] == 'error':
-                    token = "error"
-                    break
+                token = tuple_lst_item[0]
             else:
                 # continue setting in the token and return it
                 continue
@@ -94,140 +78,82 @@ class Lexicon(object):
         return token
 
     # set most of the output things to match the test cases
-    def set_output_sentence(self, scan_input):
-        # set search string into multiple words or remain a single
-        known_words_list = []
-        output_test_obj = []
-        count = -1
-        token = ''
-        bln_known = False
+    def set_input_sentence(self, scan_input):
         # set scan sentence to scan input
+        # set search string into multiple words or remain a single
         scan_variable_sentence = []
         scan_variable_sentence = scan_input.split()
 
+        if len(scan_variable_sentence) == 1:
+            output_test_obj = self.set_return_value_obj(scan_variable_sentence)
+            return output_test_obj
+        elif len(scan_variable_sentence) >= 2:
+            self.set_maximum_input_words(scan_variable_sentence)
+            output_test_obj = self.set_return_value_obj(scan_variable_sentence)
+            return output_test_obj
+
+    def set_return_value_obj(self, scan_input_variable):
+        known_words_list = []
         # build a list of all words
         known_words_list = self.build_all_words_list()
 
-        if len(scan_variable_sentence) == 1:
-            # set search string into single word
-            for known_word in scan_variable_sentence:
-                count = - 1
-                # set the error known word while it's stil there
-                tmp_error_var = ""
-                if tmp_error_var == "" and known_word != None:
-                    tmp_error_var = known_word
-                for i in range(0, len(known_words_list) - 1):
-                    count += 1
-                    # set the convert on the list count to have it pass as equal
-                    if isinstance(known_words_list[count], int):
-                        known_word = self.convert_number(known_word)
-                        # isinstance(known_word, int)
-                        # known_word = int(known_word)
+        count = -1
+        token = ''
+        bln_known = False
+        output_test_obj = []
 
-                    # set the output string after we run out of known words or we are in error field
-                    if known_words_list[count] != known_word and bln_known == False and count >= 32:
-                        token = "error"
-                        output_test_obj.append(tuple(self.pair_up(token, tmp_error_var)))
-                        break
-                    # set the known word, with use of a token, that equals your input
-                    elif known_words_list[count] == known_word and count <= 32:
-                        bln_known = True
-                        token = self.set_token_fixed_text(known_word)
-                        output_test_obj.append(tuple(self.pair_up(token, known_word)))
-                        break
-                    # set the output string after we run out of known words or we are in error field
-                    elif count >= 33:
-                        token = "error"
-                        output_test_obj.append(tuple(self.pair_up(token, tmp_error_var)))
-                        break
-                    # continue to check and set the output sentence
-                    else:
-                        continue
-            # return the fully set output variable
-            return output_test_obj
+        # set the first return word in according with the scan_input variable(scan_variable_sentence)
+        for known_word in scan_input_variable:
+            count = - 1
+            # set the error known word while it's stil there
+            tmp_error_var = ""
+            if tmp_error_var == "" and known_word != None:
+                tmp_error_var = known_word
+            for i in range(0, len(known_words_list) - 1):
+                count += 1
+                # set the convert on the list count to have it pass as equal
+                if isinstance(known_words_list[count], int):
+                    known_word = self.convert_number(known_word)
+                    # isinstance(known_word, int)
+                    # known_word = int(known_word)
 
-        # pick out the multi line input way
-        elif len(scan_variable_sentence) > 1:
-
-            # build the different input ways, 2 words untill 10 words
-            for i in range(0, (len(scan_variable_sentence) -1)):
-                tmp_sentence = []
-                if len(scan_variable_sentence) == 2:
-                    for y in range(0,2):
-                        tmp_sentence.append(scan_variable_sentence[y])
+                # set the output string after we run out of known words or we are in error field
+                if known_words_list[count] != known_word and bln_known == False and count >= 32:
+                    token = "error"
+                    output_test_obj.append(tuple(self.pair_up(token, tmp_error_var)))
                     break
-                elif len(scan_variable_sentence) == 3:
-                    for y in range(0,3):
-                        tmp_sentence.append(scan_variable_sentence[y])
+                # set the known word, with use of a token, that equals your input
+                elif known_words_list[count] == known_word and count <= 32:
+                    bln_known = True
+                    token = self.set_token_fixed_text(known_word)
+                    output_test_obj.append(tuple(self.pair_up(token, known_word)))
                     break
-                elif len(scan_variable_sentence) == 4:
-                    for y in range(0,4):
-                        tmp_sentence.append(scan_variable_sentence[y])
+                # set the output string after we run out of known words or we are in error field
+                elif count >= 33:
+                    token = "error"
+                    output_test_obj.append(tuple(self.pair_up(token, tmp_error_var)))
                     break
-                elif len(scan_variable_sentence) == 5:
-                    for y in range(0,5):
-                        tmp_sentence.append(scan_variable_sentence[y])
-                    break
-                elif len(scan_variable_sentence) == 6:
-                    for y in range(0,6):
-                        tmp_sentence.append(scan_variable_sentence[y])
-                    break
-                elif len(scan_variable_sentence) == 7:
-                    for y in range(0,7):
-                        tmp_sentence.append(scan_variable_sentence[y])
-                    break
-                elif len(scan_variable_sentence) == 8:
-                    for y in range(0,8):
-                        tmp_sentence.append(scan_variable_sentence[y])
-                    break
-                elif len(scan_variable_sentence) == 9:
-                    for y in range(0,9):
-                        tmp_sentence.append(scan_variable_sentence[y])
-                    break
-                elif len(scan_variable_sentence) == 10:
-                    for y in range(0,10):
-                        tmp_sentence.append(scan_variable_sentence[y])
-                    break
+                # continue to check and set the output sentence
                 else:
-                    # set an error message to inform the user
-                    print("Something went wrong, check input,max 10 allowed")
+                    continue
+        # return the fully set output variable
+        return output_test_obj
 
-            # set the first return word in according with the scan_input variable(scan_variable_sentence)
-            for known_word in scan_variable_sentence:
-                count = - 1
-                # set the error known word while it's stil there
-                tmp_error_var = ""
-                if tmp_error_var == "" and known_word != None:
-                    tmp_error_var = known_word
-                for i in range(0, len(known_words_list) - 1):
-                    count += 1
-                    # set the convert on the list count to have it pass as equal
-                    if isinstance(known_words_list[count], int):
-                        known_word = self.convert_number(known_word)
-                        # isinstance(known_word, int)
-                        # known_word = int(known_word)
-
-                    # set the output string after we run out of known words or we are in error field
-                    if known_words_list[count] != known_word and bln_known == False and count >= 32:
-                        token = "error"
-                        output_test_obj.append(tuple(self.pair_up(token, tmp_error_var)))
-                        break
-                    # set the known word, with use of a token, that equals your input
-                    elif known_words_list[count] == known_word and count <= 32:
-                        bln_known = True
-                        token = self.set_token_fixed_text(known_word)
-                        output_test_obj.append(tuple(self.pair_up(token, known_word)))
-                        break
-                    # set the output string after we run out of known words or we are in error field
-                    elif count >= 33:
-                        token = "error"
-                        output_test_obj.append(tuple(self.pair_up(token, tmp_error_var)))
-                        break
-                    # continue to check and set the output sentence
-                    else:
-                        continue
-            # return the fully set output variable
-            return output_test_obj
+    def set_maximum_input_words(self, scan_input_variable):
+        return_value_obj = []
+        # build the different input ways, 2 words untill 10 words
+        for i in range(0, (len(scan_input_variable) -1)):
+            tmp_sentence = []
+            j = len(scan_input_variable)
+            if j > 10:
+                j = 10
+            if len(scan_input_variable) == j:
+                for y in range(0,j):
+                    tmp_sentence.append(scan_input_variable[y])
+                    break
+            else:
+                # set an error message to inform the user
+                print("Something went wrong, check input,max 10 allowed")
 
     # return the whole number as integer, check if it's an integer
     def convert_number(self, x):
